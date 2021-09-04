@@ -1,0 +1,18 @@
+#!/bin/bash
+
+vidpath=`echo "$1" | awk '{print $(NF)}'`
+vidpath=`dirname "$vidpath"`
+
+if ! [ -e "$vidpath/thumbnail.png" ]; then
+    echo '--------------'
+    echo
+    echo ' NO THUMBNAIL'
+    echo
+    echo '--------------'
+else
+    viu -s -w "$FZF_PREVIEW_COLUMNS" "$vidpath/thumbnail.png"
+fi
+
+utils/getinfo "$vidpath"
+echo '-----'
+utils/getdescription "$vidpath"

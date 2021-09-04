@@ -1,0 +1,17 @@
+#!/bin/bash
+
+case "$1" in
+    videos | v | vid | vids)
+        find channels/* -mindepth 1 -maxdepth 1 -type d -not -name "_info"
+        ;;
+    channels | c | ch)
+        find channels/ -mindepth 1 -maxdepth 1 -type d
+        ;;
+    -h | --help | *)
+        echo "$0 {videos|channels|-h}"
+        echo '  videos: list all videos from all channels'
+        echo '  channels: list all channels'
+        echo '  -h: print this help'
+        exit
+        ;;
+esac

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+path="$1"
+[ -f "$path" ] && path=`dirname "$path"`
+
+jq '.description' --raw-output "$path/video.info.json"

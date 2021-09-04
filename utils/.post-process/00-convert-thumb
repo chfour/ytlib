@@ -1,0 +1,12 @@
+#!/bin/bash
+vidpath="$1"
+
+thumb_path=`ls $vidpath/video.{jpg,webp,jpeg,png} 2> /dev/null`
+if [ -n "$thumb_path" ]; then
+    echo '[convert-thumb] convert thumbnail to png'
+    convert "$thumb_path" "$vidpath/thumbnail.png"
+    echo '[convert-thumb] remove old thumbnail'
+    viu -w 25 "$vidpath/thumbnail.png" && rm "$thumb_path"
+else
+    echo '[convert-thumb] thumbnail already converted'
+fi

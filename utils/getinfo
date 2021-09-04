@@ -1,0 +1,16 @@
+#!/bin/bash
+
+for path in "$@"; do
+	[ -f "$path" ] && path=`dirname "$path"`
+	echo "$path:"
+	jq '" title: \(.fulltitle)
+ channel: \(.channel)
+ \(.like_count) likes, \(.dislike_count) dislikes, \(.view_count) views
+ duration: \(.duration | strftime("%H:%M:%S"))
+ tags: \(if .tags == [] then "<none>" else .tags | join(", ") end)
+ subtitles: \(if .subtitles == {} or .subtitles == null then "<none>" else .subtitles | keys | join(", ") end)
+ format: \(.format)
+         \(.width)x\(.height) @ \(.fps) FPS, \(.ext)
+ original URL: \(.webpage_url)"'\
+	--raw-output "$path/video.info.json"
+done

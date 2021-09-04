@@ -1,0 +1,12 @@
+#!/bin/bash
+vidpath=`dirname "$1"`
+
+echo "[post-process] processing '$vidpath'"
+
+for hook in utils/.post-process/*; do
+    echo "[post-process] running $hook"
+    "$hook" "$vidpath"
+    echo "[post-process] $hook exited with code $?"
+done
+
+utils/getinfo "$vidpath"

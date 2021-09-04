@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ "$1" = "-h" ]; then
+    echo "$0: get a random video from a random channel"
+    echo "usage: $0 [-h] [-n]"
+    echo ' -h: display this message'
+    echo ' -d: get the directory, not the video'
+    exit
+fi
+
+video=`echo channels/*/* | tr ' ' '\n' | shuf -n 1`
+
+if [ "$1" = "-d" ]; then
+    echo "$video/"
+else
+    echo "$video/video.mkv"
+fi
+

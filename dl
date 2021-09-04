@@ -1,0 +1,17 @@
+#!/bin/bash
+ytdl="youtube-dl"
+
+if [ "$1" = "" ]; then
+    echo "$0: nothing specified"
+    exit 1
+fi
+
+cd `dirname $0`
+
+echo "----
+begin ytlib run
+ $(date)
+ args: $@
+" >> .ytlib.log
+
+$ytdl --config-location ".config/ytdl.conf" "$@"

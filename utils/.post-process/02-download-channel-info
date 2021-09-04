@@ -1,0 +1,79 @@
+#!/bin/bash
+vidpath="$1"
+
+checkfile (){
+    [ -e "$1" ] && ! [ "$(wc -c "$1" | awk '{print $1}')" = "0" ]
+}
+
+checkjson (){
+    jq '.' "$1" > /dev/null
+}
+
+infopath="$vidpath/../_info"
+
+! [ -e "$vidpath/video.info.json" ] && echo '[channel-info] cannot find video.info.json' && exit
+
+mkdir -p "$infopath"
+channelurl=`jq '.channel_url' "$vidpath/video.info.json" --raw-output`
+if [ "$channelurl" = "" ]; then
+    echo '[channel-info] channelurl is empty. message sent to logfile'
+    echo "[channel-info] channelurl empty for $vidpath" >> .ytlib.log
+    exit
+fi
+echo "[channel-info] channel url is '$channelurl', vidpath $vidpath"
+
+! checkjson "$infopath/.initialdata.json" && rm -f "$infopath/.initialdata.json"
+
+if ! checkfile "$infopath/.initialdata.json"; then
+    echo "[channel-info/initial] getting $channelurl/about"
+    curl "$channelurl/about" --cookie 'PREF=hl=en' --silent |
+        grep -Eo 'var ytInitialData = \{.*\};<\/script><link rel="canonical" href="https:\/\/www\.youtube\.com\/channel' |
+        sed -e 's/^var ytInitialData = //' |
+        sed -e 's/\;<\/script><link rel="canonical" href="https:\/\/www.youtube.com\/channel.*//' > "$infopath/.initialdata.json"
+
+    if ! checkfile "$infopath/.initialdata.json"; then
+        echo '[channel-info/initial] WARNING: could not find ytInitialData. message sent to logfile'
+        echo "[channel-info/initial] failed for '$vidpath' / '$channel/about'" >> .ytlib.log
+        exit
+    fi
+else
+    echo '[channel-info/initial] .initialdata.json exists'
+fi
+
+if ! checkfile "$infopath/info.json"; then
+    echo '[channel-info/infojson] updating info.json'
+    # oh no here it comes
+    jq '.contents.twoColumnBrowseResultsRenderer.tabs[5].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].channelAboutFullMetadataRenderer' "$infopath/.initialdata.json" |
+        jq -c --arg url "$channelurl" '{"name": .title.simpleText, "description": .description.simpleText, "joined": .joinedDateText.runs[1].text, "views": .viewCountText.simpleText, "country": .country.simpleText, "channel_url": $url, "updated": '"$(date +%s)"'}' > "$infopath/info.json"
+    jq . "$infopath/info.json"
+    echo '[channel-info/infojson] updated channel info.json'
+else
+    echo '[channel-info/infojson] info.json exists'
+fi
+
+if ! checkfile "$infopath/banner.png"; then
+    echo '[channel-info/banner] searching for banner...'
+    bannerurl=`jq '.header.c4TabbedHeaderRenderer.banner.thumbnails[-1].url' "$infopath/.initialdata.json" --raw-output | sed 's/\=w.*//'`
+    if ! [ "$bannerurl" = "null" ]; then
+        bannerurl="$bannerurl=w16383"
+        echo "[channel-info/banner] downloading banner from '$bannerurl'"
+        wget "$bannerurl" -O "$infopath/banner.png" && viu -w 25 "$infopath/banner.png"
+        echo '[channel-info/banner] done downloading banner.png'
+    else
+        echo '[channel-info/banner] banner not found!'
+    fi
+else
+    echo '[channel-info/banner] banner.png exists'
+fi
+
+if ! checkfile "$infopath/avatar.png"; then
+    echo '[channel-info/avatar] searching for avatar...'
+    avatarurl="$(jq '.header.c4TabbedHeaderRenderer.avatar.thumbnails[-1].url' "$infopath/.initialdata.json" --raw-output | sed 's/\=s.*//')=s16383"
+    echo "[channel-info/avatar] downloading banner from '$avatarurl'"
+    wget "$avatarurl" -O "$infopath/avatar.png" && viu --once -w 25 "$infopath/avatar.png"
+    echo '[channel-info/avatar] done downloading avatar.png'
+else
+    echo '[channel-info/avatar] avatar.png exists'
+fi
+
+echo "[channel-info] Cave Johnson, we're done here."

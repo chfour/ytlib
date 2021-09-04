@@ -1,0 +1,28 @@
+#!/bin/bash
+
+if [ "$1" = "-h" ]; then
+    echo "$0 [-h] [-f]"
+    echo ' -h: display this message'
+    echo ' -f: only print filename and exit'
+    echo 'set $PLAYER to change the video player, default `mpv %s`'
+    exit
+fi
+
+if [ ! -f ".db/index.txt" ]; then
+    echo "* index not present. use update-cache"
+    exit
+fi
+
+selected=`fzf --preview 'utils/.search-preview {}' < .db/index.txt`
+selected_file=`echo -n "$selected" | awk '{print $(NF)}'`
+
+[ -z "$selected_file" ] && exit
+
+if [ "$1" = "-f" ]; then
+    echo "$selected_file"
+else
+    FZF_PREVIEW_COLUMNS=40 utils/.search-preview "$selected"
+    [ -z "$PLAYER" ] && PLAYER="mpv %s"
+    printf -v player_cmd "$PLAYER" "$selected_file"
+    eval "$player_cmd"
+fi

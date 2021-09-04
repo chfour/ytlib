@@ -1,0 +1,33 @@
+#!/bin/bash
+
+indexfile=".db/index.txt"
+mkdir -p .db/
+
+add_to_index() {
+    jq '"\(.fulltitle) [\(.duration | strftime("%H:%M:%S"))] \(.channel) / \(if .tags == [] then "no tags" else .tags | join(",") end) \t\(._filename)"' --raw-output < "$1/video.info.json" >> "$indexfile"
+}
+
+if [ -e "$1" ]; then
+    echo "[update-cache] adding '$1' to index"
+    add_to_index "$1"
+    exit
+fi
+
+echo "* updating index in $indexfile"
+
+if [ -e "$indexfile" ]; then
+    echo "* backing up existing index"
+    mv "$indexfile" "$indexfile.bak"
+fi
+
+channels=`ls channels/`
+
+for channel in $channels; do
+    echo " - indexing channel $channel"
+    videos=`ls channels/$channel/`
+    for videodir in $videos; do
+        echo "  - adding video $videodir"
+        videodir="channels/$channel/$videodir"
+        add_to_index "$videodir"
+    done
+done
