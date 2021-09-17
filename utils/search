@@ -22,7 +22,7 @@ if [ "$1" = "-f" ]; then
     echo "$selected_file"
 else
     FZF_PREVIEW_COLUMNS=40 utils/.search-preview "$selected"
-    [ -z "$PLAYER" ] && PLAYER="mpv %s"
+    [ -z "$PLAYER" ] && PLAYER="mpv %s --sub-auto=all"
     printf -v player_cmd "$PLAYER" "$selected_file"
     eval "$player_cmd"
 fi
