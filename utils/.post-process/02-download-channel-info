@@ -22,7 +22,7 @@ if [ "$channelurl" = "" ]; then
 fi
 echo "[channel-info] channel url is '$channelurl', vidpath $vidpath"
 
-! checkjson "$infopath/.initialdata.json" && rm -f "$infopath/.initialdata.json"
+# ! checkjson "$infopath/.initialdata.json" && rm -f "$infopath/.initialdata.json"
 
 if ! checkfile "$infopath/.initialdata.json"; then
     echo "[channel-info/initial] getting $channelurl/about"
@@ -43,8 +43,9 @@ fi
 if ! checkfile "$infopath/info.json"; then
     echo '[channel-info/infojson] updating info.json'
     # oh no here it comes
-    jq '.contents.twoColumnBrowseResultsRenderer.tabs[5].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].channelAboutFullMetadataRenderer' "$infopath/.initialdata.json" |
-        jq -c --arg url "$channelurl" '{"name": .title.simpleText, "description": .description.simpleText, "joined": .joinedDateText.runs[1].text, "views": .viewCountText.simpleText, "country": .country.simpleText, "channel_url": $url, "updated": '"$(date +%s)"'}' > "$infopath/info.json"
+    subscribercounttext=`jq '.header.c4TabbedHeaderRenderer.subscriberCountText.simpleText' "$infopath/.initialdata.json" --raw-output | sed 's/ subscribers//'`
+    jq '.contents.twoColumnBrowseResultsRenderer.tabs[4].tabRenderer.content.sectionListRenderer // .contents.twoColumnBrowseResultsRenderer.tabs[5].tabRenderer.content.sectionListRenderer | .contents[0].itemSectionRenderer.contents[0].channelAboutFullMetadataRenderer' "$infopath/.initialdata.json" |
+        jq -c --arg url "$channelurl" --arg subscribers "$subscribercounttext" '{"name": .title.simpleText, "description": .description.simpleText, "joined": .joinedDateText.runs[1].text, "subscribers": $subscribers, "views": .viewCountText.simpleText, "country": .country.simpleText, "channel_url": $url, "updated": '"$(date +%s)"'}' > "$infopath/info.json"
     jq . "$infopath/info.json"
     echo '[channel-info/infojson] updated channel info.json'
 else
