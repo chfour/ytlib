@@ -20,6 +20,8 @@ selected_file=`echo -n "$selected" | awk '{print $(NF)}'`
 
 if [ "$1" = "-f" ]; then
     echo "$selected_file"
+elif [ "$1" = "-d" ]; then
+    echo `dirname "$selected_file"`
 else
     FZF_PREVIEW_COLUMNS=40 utils/.search-preview "$selected"
     [ -z "$PLAYER" ] && PLAYER="mpv %s --sub-auto=all"
