@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [ "$1" = "" ] || [ "$2" == "" ]; then
+    echo "$0 to_export output_directory_or_filename"
+    exit
+fi
+
+if ! [ -d "$1" ]; then
+    echo "$0: $1: not a directory"
+    exit
+fi
+
+vidpath="${1%/}"
+
+if [ -d "$2" ]; then
+    filename=`jq '.fulltitle[:30] + "-" + .channel[:15] + "-" + .id | sub("[^0-9a-zA-Z_-]"; "_"; "g")' "$vidpath/video.info.json" --raw-output`
+    filename="${2%/}/$filename.7z"
+else
+    filename="$2"
+fi
+
+echo "$vidpath/"
+ls -lh "$vidpath/"
+
+echo -n "will save as '$filename' - is that ok? [y/N] "
+read answer
+echo
+answer="${answer:0:1}"
+! [ "${answer,}" = "y" ] && exit
+
+echo 'compressing...'
+
+7z a "$filename" $1/*
