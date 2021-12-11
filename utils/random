@@ -8,11 +8,11 @@ if [ "$1" = "-h" ]; then
     exit
 fi
 
-video=`echo channels/*/* | tr ' ' '\n' | shuf -n 1`
+video=`shuf -n 1 .db/index.txt | awk '{print $NF}'`
 
 if [ "$1" = "-d" ]; then
-    echo "$video/"
+    echo `dirname "$video"`
 else
-    echo "$video/video.mkv"
+    echo "$video"
 fi
 
