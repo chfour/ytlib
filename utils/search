@@ -1,19 +1,25 @@
 #!/bin/bash
 
+source .config/ytlib.conf.dist
+[ -e 'ytlib.conf' ] && source ytlib.conf
+
 if [ "$1" = "-h" ]; then
     echo "$0 [-h] [-f]"
     echo ' -h: display this message'
     echo ' -f: only print filename and exit'
-    echo 'set $PLAYER to change the video player, default `mpv %s`'
+    echo 'set $PLAYER to change the video player'
     exit
 fi
 
-if [ ! -f ".db/index.txt" ]; then
-    echo "* index not present. use update-cache"
+if [ ! -f "$INDEXDB" ]; then
+    echo "* index not present at '$INDEXDB'. use update-cache"
     exit
 fi
 
-selected=`fzf  --no-sort --tac --preview 'utils/.search-preview {}' < .db/index.txt`
+fzfargs=""
+[ "$SEARCHSORT" = "0" ] && fzfargs="$fzfargs --no-sort --tac"
+
+selected=`fzf $fzfargs --preview 'utils/.search-preview {}' < "$INDEXDB"`
 selected_file=`echo -n "$selected" | awk '{print $(NF)}'`
 
 [ -z "$selected_file" ] && exit
@@ -23,7 +29,6 @@ if [ "$1" = "-f" ]; then
 elif [ "$1" = "-d" ]; then
     echo `dirname "$selected_file"`
 else
-    [ -z "$PLAYER" ] && PLAYER="mpv %s --sub-auto=all"
     printf -v player_cmd "$PLAYER" "$selected_file"
     eval "$player_cmd"
 fi

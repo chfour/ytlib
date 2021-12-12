@@ -1,0 +1,27 @@
+# ytlib config file
+
+# !! `mv .config/ytlib.conf.dist ytlib.conf` first, then edit !!
+source .config/optset
+
+# ----- general options
+
+# enable/disable logging to .ytlib.log
+# 1: enabled, 0: disabled
+# default: 1
+optset LOGGING 1
+
+# set index file path
+# default: '.db/index.txt'
+optset INDEXDB '.db/index.txt'
+
+
+# ----- utils/search options
+
+# set player command for search, %s gets replaced with the path to the file
+# default: 'mpv %s --sub-auto=all'
+optset PLAYER 'mpv %s --sub-auto=all'
+
+# set whether to sort by latest added or alphabetically
+# 1: alphabetically, 0: latest added
+# default: 0
+optset SEARCHSORT 0

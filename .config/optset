@@ -1,0 +1,6 @@
+#!/bin/bash
+# optset, set variable if not already set
+
+optset(){
+    [ -z "${!1}" ] && export "$1"="$2"
+}
