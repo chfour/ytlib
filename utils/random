@@ -1,5 +1,8 @@
 #!/bin/bash
 
+source .config/ytlib.conf.dist
+[ -e 'ytlib.conf' ] && source ytlib.conf
+
 if [ "$1" = "-h" ]; then
     echo "$0: get a random video from a random channel"
     echo "usage: $0 [-h] [-n]"
@@ -8,7 +11,7 @@ if [ "$1" = "-h" ]; then
     exit
 fi
 
-video=`shuf -n 1 .db/index.txt | awk '{print $NF}'`
+video=`shuf -n 1 "$INDEXDB" | awk '{print $NF}'`
 
 if [ "$1" = "-d" ]; then
     echo `dirname "$video"`
