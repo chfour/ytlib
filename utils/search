@@ -16,10 +16,10 @@ if [ ! -f "$INDEXDB" ]; then
     exit
 fi
 
-fzfargs=""
-[ "$SEARCHSORT" = "0" ] && fzfargs="$fzfargs --no-sort --tac"
-
-selected=`fzf $fzfargs --preview 'utils/.search-preview {}' < "$INDEXDB"`
+fzfargs=( )
+[ "$SEARCHSORT" = "0" ] && fzfargs+=("--no-sort" "--tac")
+! [ "$SEARCHPREVIEW" = "0" ] && fzfargs+=("--preview" 'utils/.search-preview {}')
+selected=`fzf "${fzfargs[@]}" < "$INDEXDB"`
 selected_file=`echo -n "$selected" | awk '{print $(NF)}'`
 
 [ -z "$selected_file" ] && exit

@@ -25,3 +25,8 @@ optset PLAYER 'mpv %s --sub-auto=all'
 # 1: alphabetically, 0: latest added
 # default: 0
 optset SEARCHSORT 0
+
+# enable/disable preview
+# 1: enabled, 0: disabled
+# default: 1
+optset SEARCHPREVIEW 1
