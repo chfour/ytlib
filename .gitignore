@@ -2,3 +2,4 @@
 .db/
 /list.txt
 /.ytlib.log
+/.config/ytlib.conf
