@@ -18,8 +18,10 @@ optset INDEXDB '.db/index.txt'
 # ----- utils/search options
 
 # set player command for search, %s gets replaced with the path to the file
-# default: 'mpv %s --sub-auto=all'
-optset PLAYER 'mpv %s --sub-auto=all'
+# default: 'mpv %s --sub-auto=all --hwdec=auto'
+#          `--sub-auto=all` to make mpv read all subtitle files in the video's directory
+#          `--hwdec=auto` to automatically use whatever hardware decoding is available,
+optset PLAYER 'mpv %s --sub-auto=all --hwdec=auto'
 
 # set whether to sort by latest added or alphabetically
 # 1: alphabetically, 0: latest added
