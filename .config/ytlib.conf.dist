@@ -24,8 +24,9 @@ optset INDEXDB '.db/index.txt'
 optset PLAYER 'mpv %s --sub-auto=all --hwdec=auto'
 
 # set whether to sort by latest added or alphabetically
-# 1: alphabetically, 0: latest added
-# default: 0
+# 1: alphabetically, 0: latest added*
+# *0 may or may not mess with search result order
+# default: 1
 optset SEARCHSORT 0
 
 # enable/disable preview

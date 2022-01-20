@@ -5,17 +5,36 @@ source .config/ytlib.conf.dist
 
 if [ "$1" = "-h" ]; then
     echo "$0: get a random video from a random channel"
-    echo "usage: $0 [-h] [-n]"
+    echo "usage: $0 [-h] [-d] [-p]"
     echo ' -h: display this message'
     echo ' -d: get the directory, not the video'
+    echo ' -p: get random video, ask y/n, play if yes, repeat if no'
     exit
 fi
 
-video=`shuf -n 1 "$INDEXDB" | awk '{print $NF}'`
+getrandom () {
+    shuf -n 1 "$INDEXDB" | awk '{print $NF}'
+}
 
-if [ "$1" = "-d" ]; then
-    echo `dirname "$video"`
+if [ "$1" = "-p" ]; then
+    while : ; do
+        video=`getrandom`
+        utils/getinfo "$video"
+        read -e -p "y/N?" choice
+        case "$choice" in
+            [Yy])
+                printf -v player_cmd "$PLAYER" "$video"
+                eval "$player_cmd"
+                ;;
+            [qQ])
+                break ;;
+        esac
+    done
 else
-    echo "$video"
+    video=`getrandom`
+    if [ "$1" = "-d" ]; then
+        echo `dirname "$video"`
+    else
+        echo "$video"
+    fi
 fi
-

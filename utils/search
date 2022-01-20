@@ -17,7 +17,7 @@ if [ ! -f "$INDEXDB" ]; then
 fi
 
 fzfargs=( )
-[ "$SEARCHSORT" = "0" ] && fzfargs+=("--no-sort" "--tac")
+[ "$SEARCHSORT" = "0" ] && fzfargs+=("--tac")
 ! [ "$SEARCHPREVIEW" = "0" ] && fzfargs+=("--preview" 'utils/.search-preview {}')
 selected=`fzf "${fzfargs[@]}" < "$INDEXDB"`
 selected_file=`echo -n "$selected" | awk '{print $(NF)}'`
