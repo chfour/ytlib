@@ -1,5 +1,5 @@
 #!/bin/bash
-ytdl="youtube-dl"
+ytdl="yt-dlp"
 
 if [ "$1" = "" ]; then
     echo "$0: nothing specified"
