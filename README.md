@@ -15,7 +15,7 @@ youtube videos. features include:
 
 first of all, install the dependencies:
 
-* [youtube-dl](https://github.com/ytdl-org/youtube-dl) (required, duh)
+* [yt-dlp](https://github.com/yt-dlp/yt-dlp) (required, duh)
 * [jq](https://stedolan.github.io/jq/) (required)
 * curl & wget (required, both used by the channel info downloader)
 * [fzf](https://github.com/junegunn/fzf) (recommended, used by `utils/search`)
@@ -30,4 +30,4 @@ the recommended way to use this thing is to create a `list.txt` file in the root
 
 ## TODO
 
-* global config file
+* comments
