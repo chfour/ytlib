@@ -14,4 +14,4 @@ begin ytlib run
  args: $@
 " >> .ytlib.log
 
-$ytdl --config-location ".config/ytdl.conf" "$@"
+$ytdl --config-location ".internal/ytdl.conf" "$@"

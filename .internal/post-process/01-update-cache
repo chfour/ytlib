@@ -4,7 +4,7 @@ indexfile=".db/index.txt"
 mkdir -p .db/
 
 add_to_index() {
-    relpath=`realpath --relative-to=. "$1/video.info.json"`
+    relpath=`realpath --relative-to=. "$1/video.mkv"`
     jq --arg filename "$relpath" '"\(.fulltitle) [\(.duration | strftime("%H:%M:%S"))] \(.channel) / \(if .tags == [] then "no tags" else .tags | join(",") end) \t\($filename)"' --raw-output < "$1/video.info.json" >> "$indexfile"
 }
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source .config/ytlib.conf.dist
-[ -e 'ytlib.conf' ] && source ytlib.conf
+[ -e '.config/ytlib.conf' ] && source .config/ytlib.conf
 
 if [ "$1" = "-h" ]; then
     echo "$0: get a random video from a random channel"
