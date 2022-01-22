@@ -1,0 +1,10 @@
+#!/bin/bash
+vidpath="$1"
+
+if [ "$COMPRESSINFO" = 1 ]; then
+    echo '[compress-infojson] compressing...'
+    gzip "$1/video.info.json"
+    echo '[compress-infojson] done compressing'
+else
+    echo '[compress-infojson] COMPRESSINFO not enabled, skipping...'
+fi

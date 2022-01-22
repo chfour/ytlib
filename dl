@@ -1,6 +1,9 @@
 #!/bin/bash
 ytdl="yt-dlp"
 
+source .config/ytlib.conf.dist
+[ -e '.config/ytlib.conf' ] && source .config/ytlib.conf
+
 if [ "$1" = "" ]; then
     echo "$0: nothing specified"
     exit 1

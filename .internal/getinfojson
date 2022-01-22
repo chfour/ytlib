@@ -1,0 +1,6 @@
+#!/bin/bash
+
+vidpath="$1"
+
+[ -e "$vidpath/video.info.json" ] && cat "$vidpath/video.info.json" && exit
+[ -e "$vidpath/video.info.json.gz" ] && gunzip "$vidpath/video.info.json.gz" -c && exit

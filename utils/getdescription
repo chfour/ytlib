@@ -3,4 +3,4 @@
 path="$1"
 [ -f "$path" ] && path=`dirname "$path"`
 
-jq '.description' --raw-output "$path/video.info.json"
+.internal/getinfojson "$path" | jq '.description' --raw-output

@@ -15,6 +15,18 @@ optset LOGGING 1
 optset INDEXDB '.db/index.txt'
 
 
+# ----- download options
+
+# enable/disable compression of video.info.json files after downloading
+# 1: enabled, 0: disabled
+# default: 1
+optset COMPRESSINFO 1
+#  note: to compress all already existing infojson files, run:
+#  find channels/ -name 'video.info.json' -exec gzip '{}' \;
+#  to decompress:
+#  find channels/ -name 'video.info.json.gz' -exec gunzip '{}' \;
+
+
 # ----- utils/search options
 
 # set player command for search, %s gets replaced with the path to the file
