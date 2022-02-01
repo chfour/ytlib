@@ -24,7 +24,7 @@ first of all, install the dependencies:
 
 ### usage
 
-then, just run `./dl` + any parameters you'd like, see [youtube-dl/README.md#options](https://github.com/ytdl-org/youtube-dl/blob/master/README.md#options) for more info.
+then, just run `./dl` + any parameters you'd like, see [youtube-dl/README.md#options](https://github.com/yt-dlp/yt-dlp#usage-and-options) for more info.
 
 the recommended way to use this thing is to create a `list.txt` file in the root of this repo (already added to the .gitignore) and then use `./dl -l list.txt` (see [here](https://gist.github.com/chfour/46019d153b693ab84b1a76af817b8a40) for an example - my own `list.txt`)
 
