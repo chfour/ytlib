@@ -7,8 +7,8 @@ for path in "$@"; do
  channel: \(.channel)
  \(.like_count) likes, \(.dislike_count) dislikes, \(.view_count) views
  duration: \(.duration | strftime("%H:%M:%S"))
- tags: \(if .tags == [] then "<none>" else .tags | join(", ") end)
- subtitles: \(if .subtitles == {} or .subtitles == null then "<none>" else .subtitles | keys | join(", ") end)
+ tags: \(if (.tags // []) == [] then "<none>" else .tags | join(", ") end)
+ subtitles: \(if (.subtitles // {}) == {} then "<none>" else .subtitles | keys | join(", ") end)
  format: \(.format)
          \(.width)x\(.height) @ \(.fps) FPS, \(.ext)
  original URL: \(.webpage_url)"'\
