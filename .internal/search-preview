@@ -10,7 +10,7 @@ if ! [ -e "$vidpath/thumbnail.png" ]; then
     echo
     echo '--------------'
 else
-    viu -s -w "$FZF_PREVIEW_COLUMNS" "$vidpath/thumbnail.png"
+    viu -s -w "$((FZF_PREVIEW_COLUMNS-2))" "$vidpath/thumbnail.png"
 fi
 
 utils/getinfo "$vidpath"
